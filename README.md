@@ -1,2 +1,3 @@
-# ens-kitchen
-Repo to contain all ENS-related helper directories that require code
+# kpk-kitchens
+
+Repo to contain kpk related helper directories that require code for own projects

@@ -1,8 +1,8 @@
 """
 ENS Kitchen - Price Data Collection and Analysis Script
 
-This script fetches historical price data from CoinGecko for assets listed in a Google Sheet,
-calculates returns, and exports the results to a CSV file.
+This script fetches historical price data from CoinGecko for assets listed in the jt_kitchen
+Google Sheet, calculates returns, and exports the results to a CSV file.
 
 Note: This script is designed to run in Google Colab and requires Google authentication.
 """

@@ -45,6 +45,8 @@ class JTConfig(BaseConfig):
     
     # jt_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1mIQTla9L7l3FBh1k8xtpHQwHMN4D7nHl1u5nsdeWdA0/"
+    LK_ASSETS: str = 'lk_assets'
+    SN_PRICES: str = 'prices.csv'
     
     # ==============================================
     # Variables & Constants
@@ -118,7 +120,7 @@ class ENSConfig(BaseConfig):
     #  Directories
     # ==============================================
     
-    # jt_kitchen sheet
+    # ens_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
     LK_ASSETS: str = 'lk_assets'
     SN_PRICES: str = 'prices.csv'

@@ -122,7 +122,3 @@ class ENSConfig(BaseConfig):
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
     LK_ASSETS: str = 'lk_assets'
     SN_PRICES: str = 'prices.csv'
-    
-    # ==============================================
-    # Variables & Constants
-    # ==============================================

@@ -87,7 +87,7 @@ def gecko_get_price_historical(
 
     if headers is None:
         headers = {
-            'accept': 'application/json',
+            'accept': 'application/json'
         }
 
     complete_endpoint = f"{base_url}/coins/{asset_id}/market_chart"

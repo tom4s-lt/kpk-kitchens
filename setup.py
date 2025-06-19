@@ -21,4 +21,4 @@ setup(
     author="Tomas Galizia",
     description="Shared utilities for KPK kitchen notebooks",
     python_requires=">=3.7",
-) 
+)

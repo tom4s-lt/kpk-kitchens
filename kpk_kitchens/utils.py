@@ -8,6 +8,183 @@ import requests
 import time
 from datetime import datetime
 
+def etl_gen_df_from_gsheet(
+    gc,
+    wb_url: str,
+    page: str,
+    output_type: str = 'json',
+    index_col: str = ''
+) -> Union[pd.DataFrame, List[Dict[str, Any]]]:
+    """
+    Generates dataframe from a table stored in google sheets.
+    str dtype is forced for conversion to decimal.Decimal type with all decimals.
+
+    Args:
+        gc: Google Sheets client instance
+        wb_url: URL of the spreadsheet
+        page: Name of the page that has to be accessed
+        output_type: Type of output desired (json/df)
+        index_col: Column label to be used as string
+        params:
+        headers:
+
+    Returns:
+        DataFrame or list of records containing information from the page
+    """
+    wb = gc.open_by_url(wb_url)
+    sheet = wb.worksheet(page)
+    records = sheet.get_all_records()
+
+    if output_type == 'df':
+        df = pd.DataFrame(records, dtype=str)
+        if index_col:
+            df.set_index(index_col, drop=True, inplace=True)
+        return df
+    
+    return records
+
+def get_gecko_price_historical(
+    base_url: str,
+    asset_id: str,
+    api_key: str,
+    max_retries: int = 3,
+    retry_delay: int = 5,
+    timeout: int = 30,
+    params: Dict[str, Any] = {
+        'vs_currency': 'usd',
+        'days': '365',
+        'interval': 'daily'
+    },
+    headers: Dict[str, Any] = {
+        'accept': 'application/json',
+    }
+) -> Optional[Dict[str, Any]]:
+    """
+    Fetch historical price data for a given asset from CoinGecko API.
+
+    Args:
+        base_url: The base url of the api.
+        asset_id: The CoinGecko ID of the asset (e.g., 'bitcoin', 'ethereum').
+        api_key: The CoinGecko API key.
+        max_retries (int, optional): Maximum number of retry attempts. Defaults to 3.
+        retry_delay (int, optional): Delay between retries in seconds. Defaults to 5.
+        timeout: The timeout for the request in seconds. Defaults to 30.
+
+    Returns:
+        Optional[Dict[str, Any]]: JSON response containing historical price data if successful,
+                                 None if all retry attempts fail.
+
+    Raises:
+        ValueError: If asset_id is empty or None.
+    """
+
+    if not asset_id:
+        raise ValueError("asset_id cannot be empty or None")
+
+    complete_endpoint = f"{base_url}/{asset_id}/market_chart"
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(
+                complete_endpoint,
+                params=params,
+                headers=headers,
+                timeout=timeout
+            )
+            response.raise_for_status()
+            return response.json()
+
+        except Exception as e:
+            print(f"Error on attempt {attempt + 1}/{max_retries}: {str(e)}")
+            if attempt < max_retries - 1:
+                print(f"Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+
+    print(f"Failed to fetch data for {asset_id} after {max_retries} attempts")
+    return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def get_gecko_price_historical_(
+    asset_id: str,
+    endpoint: str = Config.COINGECKO_API_BASE_URL,
+    api_key: str = Config.COINGECKO_API_KEY,
+    max_retries: int = Config.MAX_RETRIES,
+    retry_delay: int = Config.RETRY_DELAY
+) -> Optional[Dict[str, Any]]:
+    """
+    Fetch historical price data for a given asset from CoinGecko API.
+
+    Args:
+        asset_id (str): The CoinGecko ID of the asset (e.g., 'bitcoin', 'ethereum')
+        endpoint (str, optional): The CoinGecko API endpoint. Defaults to Config.COINGECKO_API_ENDPOINT.
+        api_key (str, optional): The CoinGecko API key. Defaults to Config.COINGECKO_API_KEY.
+        max_retries (int, optional): Maximum number of retry attempts. Defaults to Config.MAX_RETRIES.
+        retry_delay (int, optional): Delay between retries in seconds. Defaults to Config.RETRY_DELAY.
+
+    Returns:
+        Optional[Dict[str, Any]]: JSON response containing historical price data if successful,
+                                 None if all retry attempts fail.
+
+    Raises:
+        ValueError: If asset_id is empty or None.
+    """
+    if not asset_id:
+        raise ValueError("asset_id cannot be empty or None")
+
+    complete_endpoint = f"{endpoint}/{asset_id}/market_chart"
+
+    for attempt in range(max_retries):
+        try:
+            response = requests.get(
+                complete_endpoint,
+                params={'x_cg_demo_api_key':api_key},
+                timeout=30
+            )
+            response.raise_for_status()
+            return response.json()
+
+        except Exception as e:
+            print(f"Error on attempt {attempt + 1}/{max_retries}: {str(e)}")
+            if attempt < max_retries - 1:
+                print(f"Retrying in {retry_delay} seconds...")
+                time.sleep(retry_delay)
+
+    print(f"Failed to fetch data for {asset_id} after {max_retries} attempts")
+    return None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def fetch_data_with_retries(
     endpoint: str,
     params: Dict[str, Any],
@@ -46,39 +223,6 @@ def fetch_data_with_retries(
 
     print("Failed to fetch data after multiple attempts.")
     return None
-
-def etl_gen_df_from_gsheet(
-    gc,
-    wb_url: str,
-    page: str,
-    output_type: str = 'json',
-    index_col: str = ''
-) -> Union[pd.DataFrame, List[Dict[str, Any]]]:
-    """
-    Generates dataframe from a table stored in google sheets.
-    str dtype is forced for conversion to decimal.Decimal type with all decimals.
-
-    Args:
-        gc: Google Sheets client instance
-        wb_url: URL of the spreadsheet
-        page: Name of the page that has to be accessed
-        output_type: Type of output desired (json/df)
-        index_col: Column label to be used as string
-
-    Returns:
-        DataFrame or list of records containing information from the page
-    """
-    wb = gc.open_by_url(wb_url)
-    sheet = wb.worksheet(page)
-    records = sheet.get_all_records()
-
-    if output_type == 'df':
-        df = pd.DataFrame(records, dtype=str)
-        if index_col:
-            df.set_index(index_col, drop=True, inplace=True)
-        return df
-    
-    return records
 
 def process_coingecko_price_data(
     data: Dict[str, Any],

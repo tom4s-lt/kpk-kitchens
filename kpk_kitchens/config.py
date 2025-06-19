@@ -8,36 +8,48 @@ from typing import Dict, Any
 class BaseConfig:
     """Base configuration class containing shared settings."""
     
+    # ==============================================
+    #  API Configs
+    # ==============================================
+
     # API Keys
     COINGECKO_API_KEY: str = 'CG-jN5KXD1QFHacbpJb3T7PVJ3P'
     DUNE_API_KEY: str = 'RyXNIYLH4uE5NeEjLWQBZEcrkjTRw2EH'
-    
+
     # API Endpoints
-    COINGECKO_BASE_URL: str = "https://api.coingecko.com/api/v3"
-    COINGECKO_PRICE_ENDPOINT: str = f"{COINGECKO_BASE_URL}/simple/price?vs_currencies=usd&ids="
-    
-    # File Paths and Directories
-    DATA_DIR: str = "./data"
-    
+    COINGECKO_API_BASE_URL: str = "https://api.coingecko.com/api/v3"
+        
     # API Request Settings
     MAX_RETRIES: int = 3
     DEFAULT_TIMEOUT: int = 10
     RETRY_DELAY: int = 5
 
-    @staticmethod
-    def setup_plot_style():
-        """Set up the plotting style for matplotlib and seaborn."""
-        import matplotlib.pyplot as plt
-        import seaborn as sns
-        plt.style.use('seaborn-v0_8')
-        sns.set_theme(style="darkgrid")
+    # ==============================================
+    #  Directories
+    # ==============================================
+
+    # File Paths and Directories
+    DATA_DIR: str = "./data"
+
+    # ==============================================
+    # Variables & Constants
+    # ==============================================
+
 
 class JTConfig(BaseConfig):
     """Configuration specific to JT Kitchen."""
+
+    # ==============================================
+    #  Directories
+    # ==============================================
     
-    # Google Sheets Configuration
+    # jt_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1mIQTla9L7l3FBh1k8xtpHQwHMN4D7nHl1u5nsdeWdA0/"
     
+    # ==============================================
+    # Variables & Constants
+    # ==============================================
+
     # Important Dates
     TTE_DATE: str = "2024-04-23"
     ETL_NOW: datetime = datetime.now()
@@ -101,4 +113,12 @@ class JTConfig(BaseConfig):
 
 class ENSConfig(BaseConfig):
     """Configuration specific to ENS Kitchen."""
-    pass  # Add ENS specific configuration here 
+
+    # ==============================================
+    #  Directories
+    # ==============================================
+    
+    # jt_kitchen sheet
+    WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
+    LK_ASSETS: str = 'lk_assets'
+    SN_PRICES: str = 'prices.csv'

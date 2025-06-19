@@ -21,7 +21,9 @@ Add this to the first cell of your notebook:
 
 ```python
 # Install the package from GitHub
-!pip install git+https://github.com/your-username/kpk-kitchens.git
+GITHUB_TOKEN = "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"
+BRANCH = "main"
+! pip install git+https://{GITHUB_TOKEN}@github.com/tom4s-lt/kpk-kitchens.git@{BRANCH}
 
 # Import the configuration and utilities
 from kpk_kitchens.config import JTConfig  # or ENSConfig

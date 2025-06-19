@@ -48,11 +48,7 @@ def gecko_get_price_historical(
     max_retries: int = 3,
     retry_delay: int = 5,
     timeout: int = 30,
-    params: Dict[str, Any] = {
-        'vs_currency': 'usd',
-        'days': '365',
-        'interval': 'daily'
-    },
+    params: Dict[str, Any] = None,
     headers: Dict[str, Any] = None
 ) -> Optional[Dict[str, Any]]:
     """
@@ -77,6 +73,22 @@ def gecko_get_price_historical(
     """
     if not asset_id:
         raise ValueError("asset_id cannot be empty or None")
+
+    # Set default parameters if not provided
+    if params is None:
+        params = {
+            'vs_currency': 'usd',
+            'days': '365',
+            'interval': 'daily'
+        }
+    
+    # Add API key to params
+    params['x_cg_demo_api_key'] = api_key
+
+    if headers is None:
+        headers = {
+            'accept': 'application/json',
+        }
 
     complete_endpoint = f"{base_url}/coins/{asset_id}/market_chart"
 

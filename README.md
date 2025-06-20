@@ -60,13 +60,15 @@ data = fetch_data_with_retries(
 kpk-kitchens/
 ├── kpk_kitchens/
 │   ├── __init__.py
-│   ├── config.py      # Configuration classes
-│   └── utils.py       # Utility functions
-├── setup.py           # Package installation
-└── README.md         # This file
+│   ├── config.py  # Configuration classes
+│   ├── utils.py  # Utility functions
+├── models/
+    ├── chart_of_accounts.md/csv  # chart of accounts used for accounting
+├── setup.py  # Package installation
+├── README.md  # This file
 ```
 
-## Kitchens
+### Kitchens
 
 - `jt-kitchen/`: Joint Treasury kitchen
 - `ens-kitchen/`: ENS kitchen

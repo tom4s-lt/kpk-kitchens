@@ -67,6 +67,7 @@ def gecko_get_price_historical(
     Returns:
         Optional[Dict[str, Any]]: JSON response containing historical price data if successful,
                                  None if all retry attempts fail.
+                                 Price included is the opening price of the day, not the closing.
 
     Raises:
         ValueError: If asset_id is empty or None.

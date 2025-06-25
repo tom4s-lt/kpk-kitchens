@@ -127,6 +127,7 @@ class ENSConfig(BaseConfig):
 
     # Paths
     PRICES_CSV: str = 'prices.csv'
+    FINANCIALS_CSV: str = 'financials.csv'
 
     # ==============================================
     # Variables & Constants

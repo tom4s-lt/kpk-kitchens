@@ -7,6 +7,7 @@ import pandas as pd
 import requests
 import time
 from datetime import datetime
+import spice
 
 def etl_gen_df_from_gsheet(
     gc,
@@ -113,79 +114,122 @@ def gecko_get_price_historical(
     print(f"Failed to fetch data for {asset_id} after {max_retries} attempts")
     return None
 
-def fetch_data_with_retries(
-    endpoint: str,
-    params: Dict[str, Any],
-    max_retries: int = 3,
-    timeout: int = 10,
-    retry_delay: int = 5
+def spice_query_id(
+    query_id: int,
+    api_key: str,
+    refresh: bool = True,
+    parameters: Dict[str, Any] = None,
 ) -> Optional[Dict[str, Any]]:
     """
-    Fetch data from an API endpoint with retry logic.
+    Query dune tables using https://github.com/paradigmxyz/spice
+    Can refresh or get the latest execution result by modifying refresh param.
 
     Args:
-        endpoint: The API endpoint URL
-        params: Parameters for the API request
-        max_retries: Maximum number of retry attempts
-        timeout: Request timeout in seconds
-        retry_delay: Delay between retries in seconds
+        query_id: The Dune query ID
+        api_key: The Dune API key
+        refresh: Whether to refresh the query results
+        parameters: Parameters for the query
 
     Returns:
-        JSON response data if successful, None otherwise
+        polars DataFrame with the query results
     """
-    for attempt in range(max_retries):
-        try:
-            response = requests.get(
-                endpoint,
-                params=params,
-                timeout=timeout
-            )
-            if response.status_code == 200:
-                return response.json()
-            print(f"Error {response.status_code}: {response.text}")
-        except requests.exceptions.RequestException as e:
-            print(f"Network error: {e}")
+    query = spice.query(
+        query_id,
+        refresh=refresh,
+        api_key=api_key,
+        parameters=parameters
+    )
 
-        print(f"Retrying {attempt + 1}/{max_retries}...")
-        time.sleep(retry_delay)
+    return query.to_pandas()
 
-    print("Failed to fetch data after multiple attempts.")
-    return None
 
-def process_coingecko_price_data(
-    data: Dict[str, Any],
-    token_configs: Dict[str, Dict[str, str]],
-    etl_now: datetime
-) -> pd.DataFrame:
-    """
-    Process price data from CoinGecko API response.
 
-    Args:
-        data: Raw data from CoinGecko API
-        token_configs: Token configuration dictionary with coingecko_id and asset_class mappings
-        etl_now: Current timestamp for ETL process
 
-    Returns:
-        DataFrame with processed price data
-    """
-    df = pd.DataFrame(data)
 
-    # Mapping from coingecko ids to asset
-    inv_map = {v: k for k, v in token_configs['coingecko_id'].items()}
 
-    # Rename the columns from coingecko_id to symbol
-    df = df.rename(columns=inv_map).T
-    df.columns = ['price']
 
-    # Add the asset class for each asset
-    df['asset_class'] = df.index.map(token_configs['asset_class'])
 
-    # Add specific cases listed in the dictionary in the setup index
-    df.loc['weth', :] = df.loc['eth', :]
 
-    # Add datetime + etl_dt
-    df['datetime'] = etl_now
-    df['datetime'] = df['datetime'].dt.floor('s')
-    df['etl_dt'] = df['datetime']
 
-    return df 
+
+
+
+
+
+
+# def fetch_data_with_retries(
+#     endpoint: str,
+#     params: Dict[str, Any],
+#     max_retries: int = 3,
+#     timeout: int = 10,
+#     retry_delay: int = 5
+# ) -> Optional[Dict[str, Any]]:
+#     """
+#     Fetch data from an API endpoint with retry logic.
+
+#     Args:
+#         endpoint: The API endpoint URL
+#         params: Parameters for the API request
+#         max_retries: Maximum number of retry attempts
+#         timeout: Request timeout in seconds
+#         retry_delay: Delay between retries in seconds
+
+#     Returns:
+#         JSON response data if successful, None otherwise
+#     """
+#     for attempt in range(max_retries):
+#         try:
+#             response = requests.get(
+#                 endpoint,
+#                 params=params,
+#                 timeout=timeout
+#             )
+#             if response.status_code == 200:
+#                 return response.json()
+#             print(f"Error {response.status_code}: {response.text}")
+#         except requests.exceptions.RequestException as e:
+#             print(f"Network error: {e}")
+
+#         print(f"Retrying {attempt + 1}/{max_retries}...")
+#         time.sleep(retry_delay)
+
+#     print("Failed to fetch data after multiple attempts.")
+#     return None
+
+# def process_coingecko_price_data(
+#     data: Dict[str, Any],
+#     token_configs: Dict[str, Dict[str, str]],
+#     etl_now: datetime
+# ) -> pd.DataFrame:
+#     """
+#     Process price data from CoinGecko API response.
+
+#     Args:
+#         data: Raw data from CoinGecko API
+#         token_configs: Token configuration dictionary with coingecko_id and asset_class mappings
+#         etl_now: Current timestamp for ETL process
+
+#     Returns:
+#         DataFrame with processed price data
+#     """
+#     df = pd.DataFrame(data)
+
+#     # Mapping from coingecko ids to asset
+#     inv_map = {v: k for k, v in token_configs['coingecko_id'].items()}
+
+#     # Rename the columns from coingecko_id to symbol
+#     df = df.rename(columns=inv_map).T
+#     df.columns = ['price']
+
+#     # Add the asset class for each asset
+#     df['asset_class'] = df.index.map(token_configs['asset_class'])
+
+#     # Add specific cases listed in the dictionary in the setup index
+#     df.loc['weth', :] = df.loc['eth', :]
+
+#     # Add datetime + etl_dt
+#     df['datetime'] = etl_now
+#     df['datetime'] = df['datetime'].dt.floor('s')
+#     df['etl_dt'] = df['datetime']
+
+#     return df 

@@ -127,3 +127,9 @@ class ENSConfig(BaseConfig):
 
     # Paths
     PRICES_CSV: str = 'prices.csv'
+
+    # ==============================================
+    # Variables & Constants
+    # ==============================================
+
+    DUNE_ID_SF_EXTRACT_ENS_FINANCIALS: int = 3494149

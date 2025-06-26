@@ -31,6 +31,9 @@ class BaseConfig:
     # File Paths and Directories
     DATA_DIR: str = "./data"
 
+    PRICES_CSV: str = 'prices.csv'
+    FINANCIALS_CSV: str = 'financials.csv'
+
     # ==============================================
     # Variables & Constants
     # ==============================================
@@ -46,8 +49,9 @@ class JTConfig(BaseConfig):
     # jt_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1mIQTla9L7l3FBh1k8xtpHQwHMN4D7nHl1u5nsdeWdA0/"
     LK_ASSETS: str = 'lk_assets'
-    SN_PRICES: str = 'prices.csv'
-    
+
+    # Paths defined in parent class
+
     # ==============================================
     # Variables & Constants
     # ==============================================
@@ -125,9 +129,7 @@ class ENSConfig(BaseConfig):
     LK_ASSETS: str = 'lk_assets'
     TR_TT: str = 'tr_tt'
 
-    # Paths
-    PRICES_CSV: str = 'prices.csv'
-    FINANCIALS_CSV: str = 'financials.csv'
+    # Paths defined in parent class
 
     # ==============================================
     # Variables & Constants

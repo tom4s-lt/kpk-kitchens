@@ -31,8 +31,8 @@ class BaseConfig:
     # File Paths and Directories
     DATA_DIR: str = "./data"
 
-    PRICES_CSV: str = 'prices.csv'
-    FINANCIALS_CSV: str = 'financials.csv'
+    PRICES_CSV: str = '/prices.csv'
+    FINANCIALS_CSV: str = '/financials.csv'
 
     # ==============================================
     # Variables & Constants
@@ -136,3 +136,4 @@ class ENSConfig(BaseConfig):
     # ==============================================
 
     DUNE_ID_SF_EXTRACT_ENS_FINANCIALS: int = 3494149
+    DUNE_ID_EXTRACT_ENS_HOLDINGS: int = 3496916

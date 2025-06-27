@@ -33,6 +33,7 @@ class BaseConfig:
 
     PRICES_CSV: str = '/prices.csv'
     FINANCIALS_CSV: str = '/financials.csv'
+    HOLDINGS_CSV: str = '/holdings.csv'
 
     # ==============================================
     # Variables & Constants
@@ -126,6 +127,7 @@ class ENSConfig(BaseConfig):
     
     # ens_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
+    LK_ADDRESSES: str = 'lk_addresses'
     LK_ASSETS: str = 'lk_assets'
     TR_TT: str = 'tr_tt'
 
@@ -136,4 +138,4 @@ class ENSConfig(BaseConfig):
     # ==============================================
 
     DUNE_ID_SF_EXTRACT_ENS_FINANCIALS: int = 3494149
-    DUNE_ID_EXTRACT_ENS_HOLDINGS: int = 3496916
+    DUNE_ID_EXTRACT_ENS_DAO_HOLDINGS: int = 3496916

@@ -50,6 +50,8 @@ Used to categorize all allocations of the portfolio.
 | `account_allocation` | str | Related to strategies that generate other tokens also - measures which allocation is the account a result of... |
 | `account_level_n` | str | Complete for each account until the lower level to signal the hierarchy and be able to aggregate data for reporting |
 
+#### notes
+
 - Possible improvments:
     - Include option to check wthere it's included in the permissions for that specific client (in order to know the complete universe of investable assets).
 - Generalization:
@@ -67,6 +69,8 @@ Mapping of all addresses that belong to a specific client.
 | `sub_entity` | str | Sub category within the entity for more detail |
 | `address` | hex | [PK] Blockchain address |
 | `source` | str | Source from where the address was identified |
+
+#### notes
 
 - Possible improvements:
     - Add blockchain (right now it doesn't have it because it's ENS DAO only).
@@ -92,6 +96,8 @@ Mapping of all assets that are tracked in the portfolio/s.
 | `id_gecko` | str | Coingecko ID for the asset (for price search) |
 | `blockchain` | str | blockchain in which the asset lives (same asset in different blockchain is considered different) |
 | `contract_address` | hex | Address of the token contract |
+
+#### notes
 
 - `type_level` and `symbol_level_0` explained:
     - `type_level` is a property that expresses the amount of "underlyings" and "wraps" and asset has vs. the original representation of the underlying (e.g. aEthWETH is level `1` because it contains WETH inside that token, and an LP token would be level `2` because it contains wrapped tokens and has several underlyings). A base asset would have level `0`.
@@ -140,3 +146,5 @@ company
 - https://api-docs.octav.fi/api-models/transaction
 - https://api-docs.octav.fi/additional-informations/transaction-type
 - [ENS Accounting (SF)](https://docs.google.com/document/d/1xS4nXx1G0QCjFS-VdG5yVmVoMa5t1q9_dFZ9N4wGSJ8/edit?usp=sharing)
+- https://aave.tokenlogic.xyz/treasury
+- https://dune.com/steakhouse/ens-steakhouse

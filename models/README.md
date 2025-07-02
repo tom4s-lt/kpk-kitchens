@@ -169,9 +169,7 @@ Every transfer that involves an address related to the treasury.
 ### balances
 
 The amount of notional in each account (+ price information -> valuation in that price). Balances are built by calculating the balance of the underlying/symbol_level_0 token for each of the accounts identified. There are two dimensions to think about here:
-1. Way in which the balance is obtained:
-    1. Balances are built by the cumulative sum of transaction (which can explain all variations like accrued yield) - double entry accounting standard way
-    2. Balances are obtained via snapshots
+1. Way in which the balance is obtained (already explained [above](#models#building-blocks#data))
 2. Way in which transactions are linked into accounts:
     1. Transactions already include they account so that they are automatically linked to an account via chart of accounts id for example
     2. Transactions don’t include the same metadata as the accounts - so you need a way to link them together and build balances and results based on the chart of accounts

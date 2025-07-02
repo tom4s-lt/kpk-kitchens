@@ -137,5 +137,5 @@ class ENSConfig(BaseConfig):
     # Variables & Constants
     # ==============================================
 
-    DUNE_ID_SF_EXTRACT_ENS_FINANCIALS: int = 3494149
-    DUNE_ID_EXTRACT_ENS_DAO_HOLDINGS: int = 3496916
+    DUNE_QUERY_ID_SF_EXTRACT_ENS_FINANCIALS: int = 3494149
+    DUNE_QUERY_ID_EXTRACT_ENS_DAO_HOLDINGS: int = 3496916

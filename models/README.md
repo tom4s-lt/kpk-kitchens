@@ -45,7 +45,7 @@ Used to categorize all allocations of the portfolio.
 | *Non-vital metadata* |
 | `protocol` | int | Name of the protocol |
 | `position` | int | Name of the position |
-| `symbol` | int | Symbol of the account as explained below |
+| `symbol` |int | Symbol of the account as explained below |
 | `account_allocation` | str | Related to strategies that generate other tokens also - measures which allocation is the account a result of... |
 | `is_active` | bool | Whether the account is currently (being used by asset manager) |
 | *Vital atributes* |
@@ -96,7 +96,7 @@ Mapping of all assets that are tracked in the portfolio/s.
 | `symbol` | str | asset symbol (not sure where the ultimate source of truth for this is) - has to coincide with tx symbol or contract_address |
 | `name` | str | Name of the asset (e.g. COMP -> Compound Finance) |
 | `type_level` | int | Signals the type of underlying of the token (explained below) |
-| `symbol_level_0` | str | Level 0 symbol of the `symbol` |
+| `symbol_level_0` | str | Level 0 symbol of the `symbol` or the underlying (explained below) |
 | `company` | str | Which company is the asset being mapped for (could be named `client`/`dao`) |
 | `allocation` | str | Denotes the market exposure which might not be explicit in the chart of accounts (and asset classes). This allows to show custom asset classes while still being compliant with more accounting-focused asset classes |
 | `type_market` | str | Market exposure of the token `cash`/`fixed`/`variable` |
@@ -110,7 +110,7 @@ Mapping of all assets that are tracked in the portfolio/s.
 - Clarifications:
     - `symbol` - right now is the symbol as identified in the data warehouse & ops app - it generally is the higher level representation of the asset (the one that is transfered and held and symbolizes the strategy)
 	- `type_level` - property that expreses the type of "underlying" or "wraps" that a token has vs. the original representation (e.g. aEthWETH is level `1` because it contains WETH inside that token, representing only one asset, and an LP token would be level `2` because it contains wrapped tokens and has several underlyings). A base asset would have level `0`.
-    - `symbol_level_0` is the underlying base asset mentioned above.
+    - `symbol_level_0` is the underlying base asset mentioned above (in the cases where asset isn't level 0, `symbol_level_0` in that case represents the asset directly below, not necessarily the level 0).
 - Possible improvements:
     - Eventually assets can have a related position to double-check that in the case of transactions that involve them (but they might not coincide with the actual transaction)
     - Would eventually need more properties to work as a dimension table.

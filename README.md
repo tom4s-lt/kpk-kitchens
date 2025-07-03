@@ -75,70 +75,16 @@ The package provides shared configuration and utility functions that can be used
 from kpk_kitchens.config import JTConfig  # or ENSConfig
 
 # Use the configuration
-config = JTConfig()
-config.setup_plot_style()
 
 # Use utility functions
 from kpk_kitchens.utils import fetch_data_with_retries
 
 data = fetch_data_with_retries(
-    endpoint=config.COINGECKO_PRICE_ENDPOINT,
-    params={'x_cg_demo_api_key': config.COINGECKO_API_KEY},
-    max_retries=config.MAX_RETRIES,
-    timeout=config.DEFAULT_TIMEOUT,
-    retry_delay=config.RETRY_DELAY
-)
-```
-
-### Google Sheets Integration
-
-```python
-from kpk_kitchens.utils import etl_gen_df_from_gsheet
-import gspread
-from google.oauth2.service_account import Credentials
-
-# Setup Google Sheets client
-scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = Credentials.from_service_account_file('path/to/credentials.json', scopes=scope)
-gc = gspread.authorize(creds)
-
-# Fetch data from Google Sheets
-df = etl_gen_df_from_gsheet(
-    gc=gc,
-    wb_url=config.WORKBOOK_URL,
-    page=config.LK_ASSETS,
-    output_type='df'
-)
-```
-
-### CoinGecko API Integration
-
-```python
-from kpk_kitchens.utils import gecko_get_price_historical
-
-# Fetch historical price data
-price_data = gecko_get_price_historical(
-    base_url=config.COINGECKO_API_BASE_URL,
-    asset_id='ethereum',
-    api_key=config.COINGECKO_API_KEY,
-    params={
-        'vs_currency': 'usd',
-        'days': '30',
-        'interval': 'daily'
-    }
-)
-```
-
-### Dune Analytics Integration
-
-```python
-from kpk_kitchens.utils import spice_query_id
-
-# Query Dune Analytics
-df = spice_query_id(
-    query_id=config.DUNE_ID_SF_EXTRACT_ENS_FINANCIALS,
-    api_key=config.DUNE_API_KEY,
-    refresh=True
+    endpoint=JTConfig.COINGECKO_PRICE_ENDPOINT,
+    params={'x_cg_demo_api_key': JTConfig.COINGECKO_API_KEY},
+    max_retries=JTConfig.MAX_RETRIES,
+    timeout=JTConfig.DEFAULT_TIMEOUT,
+    retry_delay=JTConfig.RETRY_DELAY
 )
 ```
 
@@ -202,13 +148,6 @@ kpk-kitchens/
 
 ## Data Models
 
-The package follows a structured data model for portfolio reporting:
-
-1. **Balances**: Asset balances in underlying denomination units
-2. **Transactions**: All balance changes with proper categorization
-3. **Prices**: Asset pricing data for valuation calculations
-4. **Accounts**: Chart of accounts for portfolio allocation categorization
-
 See `models/README.md` for detailed data architecture documentation.
 
 ## Troubleshooting
@@ -218,22 +157,3 @@ See `models/README.md` for detailed data architecture documentation.
 1. **API Rate Limits**: If you encounter rate limit errors, increase `RETRY_DELAY` in configuration
 2. **Google Sheets Access**: Ensure your service account has proper permissions for the workbook
 3. **Dune Query Failures**: Check if the query ID is correct and the query is publicly accessible
-
-### Debug Mode
-
-Enable debug logging by setting environment variables:
-```bash
-export KPK_DEBUG=1
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.

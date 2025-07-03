@@ -16,7 +16,7 @@ There are certain rules that will be enforced for reporting and need to be ident
     3. **Special asset treatment**: e.g. own stock/token or any other specific things.
     4. **Any other topics worth mentioning**
 
-Though with a different objective, there are a lot of similarities between how regular accounting. What changes is the specifics of the models used, but in general we want to build the "financial statements but for a portfolio" plus additional investing specific metrics.
+Though with a different objective, there are a lot of similarities with regular accounting. What changes is the specifics of the models used, but in general we want to build the "financial statements but for a portfolio" plus additional investing specific metrics.
 
 ### data
 
@@ -27,7 +27,7 @@ In order to create a good portfolio report, the following concepts have to be co
 2. **Balances**: expressed in the desired denomination unit (but preferably in terms of the underlying asset).
 4. **Prices**: to express data in the desired accounting currency used (and be able to calculate M2M results, etc).
 
-There are two ways in which these building blocks can be used to product a report and properly atrtibute variations & calculate metrics:
+There are two ways in which these building blocks can be used to product a report and properly atrtibute variations and calculate metrics:
 
 1. By having balance snapshots and calculating differences + explanation of variations with transactions.
 2. By having transactions be comprehensive and cover every different kind of variation type the portfolio could have, and building balances by aggregating transactions.
@@ -42,16 +42,24 @@ Used to categorize all allocations of the portfolio.
 
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
+| *Non-vital metadata* |
+| `protocol` | int | Name of the protocol |
+| `position` | int | Name of the position |
+| `symbol` | int | Symbol of the account as explained below |
+| `account_allocation` | str | Related to strategies that generate other tokens also - measures which allocation is the account a result of... |
+| `is_active` | bool | Whether the account is currently (being used by asset manager) |
+| *Vital atributes* |
 | `account` | int | [PK] Unique identifier for the account |
 | `account_label` | str | Descriptive name for the account |
 | `account_description` | str | Description of the account |
 | `account_level` | int | Level of the account (how many categories it has above) |
-| `is_active` | bool | Whether the account is currently (being used by asset manager) |
-| `account_allocation` | str | Related to strategies that generate other tokens also - measures which allocation is the account a result of... |
 | `account_level_n` | str | Complete for each account until the lower level to signal the hierarchy and be able to aggregate data for reporting |
 
 #### notes
 
+- Clarifications:
+    - Each allocation (account) should be drilled down until the symbol (actual token being held) represents only one asset/has single price exposure. this is done in order to assign a single `symbol_level_0` to each of the balances being tracked (and then be able to decompose the portfolio into the base assets). It's also useful to index transactions that creats inflows/outflows from strategies.
+    - Unclaimed rewards is a particular allocation - does not respond to general rules and has to be treated invididually.
 - Possible improvments:
     - Include option to check wthere it's included in the permissions for that specific client (in order to know the complete universe of investable assets).
 - Generalization:
@@ -68,15 +76,16 @@ Mapping of all addresses that belong to a specific client.
 | `entity` | str | Owner or controller of the address |
 | `sub_entity` | str | Sub category within the entity for more detail |
 | `address` | hex | [PK] Blockchain address |
+| `blockchain` | hex | blockchain in which the address exists |
+| `creation_block` | int | block at which address was created |
 | `source` | str | Source from where the address was identified |
 
 #### notes
 
 - Possible improvements:
-    - Add blockchain (right now it doesn't have it because it's ENS DAO only).
     - Have to idenfity which are treasury or "trackable" wallets.
 - Generalization:
-    - Add two attributes: `client/dao` & `blockchain` in order to include every possible address.
+    - Add `client`/`dao`/`company` to differentiate between them
 
 ### assets
 
@@ -99,9 +108,8 @@ Mapping of all assets that are tracked in the portfolio/s.
 #### notes
 
 - Clarifications:
-    - `symbol` - right now is the symbol as identified in the data warehouse & ops app - it generally is the higher level representation of the asset (the one that is transfered and symbolizes the strategy)
-	- `type_level` - property that expreses the type of "underlying" or "wraps" that a token has vs. the original representation (e.g. aEthWETH is level `1` because it contains WETH inside that token, and an LP token would be level `2` because it contains wrapped tokens and has several underlyings). A base asset would have level `0`.
-        - Eventually is this was used as logic to fetch underlying balances, by mapping all underlyings for each asset until the level 0 we could do that.
+    - `symbol` - right now is the symbol as identified in the data warehouse & ops app - it generally is the higher level representation of the asset (the one that is transfered and held and symbolizes the strategy)
+	- `type_level` - property that expreses the type of "underlying" or "wraps" that a token has vs. the original representation (e.g. aEthWETH is level `1` because it contains WETH inside that token, representing only one asset, and an LP token would be level `2` because it contains wrapped tokens and has several underlyings). A base asset would have level `0`.
     - `symbol_level_0` is the underlying base asset mentioned above.
 - Possible improvements:
     - Eventually assets can have a related position to double-check that in the case of transactions that involve them (but they might not coincide with the actual transaction)
@@ -111,7 +119,7 @@ Mapping of all assets that are tracked in the portfolio/s.
 
 ### transactions
 
-Every transfer that involves an address related to the treasury.
+Every transfer that involves an address related to the treasury. Right now this doesn't reflect the ideal scenario but rather the current setup using Ops App export through Looker Studio.
 
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
@@ -131,19 +139,22 @@ Every transfer that involves an address related to the treasury.
 | `protocol_to_name` | str | protocol to which the token being transferred is going |
 | `pos_to_name` | str | position (inside the protocol) to which the token being transferred is going |
 | `comments` | str | ad hoc comments on the transaction |
-| ========== | === | ==Additional to be able to produce desired report (shouldn't be part of the table if worked correctly)== |
+| *Additional attributes* to match transactions to accounts and build balances |
 | `dir` | int | either `1` for inflows or `-1` for outflows |
-| `4_null` | bool | Returns True if the record has 4 nulls - that means only two of them should be included based on the direction of transaction in the custom protocol_from/to & pos_from/to explained below |
+| `4_null` | bool | Returns True if the record has 4 nulls (meaning no position attached) - that means only two of them should be included based on the direction of transaction in the custom `protocol_from`/`to` & `position_from`/`to` explained below |
 | `protocol_from` | str | This and the 3 below are just to organize so that the to/from attributes make sense to link txs to accounts |
 | `position_from` | str | idem |
 | `protocol_to` | str | idem |
 | `position_to` | str | idem |
-| `type_income` | str | signals if token is rebasing OR reward-bearing - or represents an unequal amount of the underlying notional |
+| `type_income` | str | link to the `assets`-`type_income` property to signal if it has to be decomposed into the underlying amount |
 | `rate` | float | conversion rate to the underlying (this is the most "heavy" part meaning it has to be fetched manually for each date for each asset that is reward bearing) |
 | `amount_level_0` | str | notional amount of the underlying asset (for reward-bearing tokens or lp tokens it's the amount of underlying they represent) |
 
 #### notes
 
+- Clarifications:
+    - Transactions have to be useful to link all transfers to a specific account denominated in their base asset (i.e. `symbol_level_0`).
+    - If the `accounts`, `assets`, `addresses` and `transactions` models are coherent to each other, there's no need to add some of the properties added here (and in the other models as well).
 - Improvements:
     - Since the tx export not always asigns transaction to and from (e.g. entering/exiting stETH position through a SWAP and not a DEPOSIT) - you have to manually add Position To/From as if it were done in the ops app
     -  Also for Endowment funding (taken into account in the capital account) & for kpk fees & other particular txs
@@ -163,19 +174,28 @@ Every transfer that involves an address related to the treasury.
 - Improvements:
     - Add `blockchain` and `token_address`/`contract_address` to the token
     - Eventually fetch prices of tokens that aren't `level_0` for completeness
+    - Add `source` used for price
 - Generalization:
     - Have to add `blockchain` to the table
+    - Maybe other client-specific workings
 
 ### balances
 
-The amount of notional in each account (+ price information -> valuation in that price). Balances are built by calculating the balance of the underlying/symbol_level_0 token for each of the accounts identified. There are two dimensions to think about here:
-1. Way in which the balance is obtained (already explained [above](#models#building-blocks#data))
-2. Way in which transactions are linked into accounts:
-    1. Transactions already include they account so that they are automatically linked to an account via chart of accounts id for example
-    2. Transactions don’t include the same metadata as the accounts - so you need a way to link them together and build balances and results based on the chart of accounts
-        1. This is done right now by adding metadata in the ops app + the csv export you get from there
+Balances are the result of the combination of accounts (asset specific) & transactions (address specific). They map the `specific amount` (of notional of the `symbol_level_0`) of an asset in a `specific address` at a `specific point in time`. The result from the combination of:
+- `addresses`
+- `accounts`
+- `assets`
+- `prices` - if you want them denominated in the unit of account.
 
-For `2.1` & `2.2` you need an `account<>transactions` adapter which is used as an interface between accounts & transactions in order to match one to another.
+There are two dimensions that have to be udnerstood:
+- Way in which the balance is obtained (already explained [above](#data))
+- Way in which transactions are linked into accounts: there needs to be an `accounts<>transactions` adapter or interface which is used to create this coherency between both and create the proper indexing.
+    - There are two ways this can be done:
+        - That data is included in the `accounts` model
+        - The data is included in a specific model which contains the interface between both.
+    - No matter which way is chosen, the logic take several different forms:
+        - Map the symbols and then when the treasury interact with symbols that are linked to specific accounts the link is formed.
+        - Not all accounts involve holding a specific symbol (example DAI in DSR Manager that returns no token) - so the combination of `symbol` & `address` involved in the transfer can be used to create the link with transactions.
 
 # refs
 

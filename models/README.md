@@ -42,24 +42,25 @@ Used to categorize all allocations of the portfolio.
 
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
-| *Non-vital metadata* |
+| *Non-vital metadata* | - | Used mainly to link txs to accounts & add more metadata that's useful (could eventually be done in a `account<>tx adapter`) |
 | `protocol` | int | Name of the protocol |
 | `position` | int | Name of the position |
 | `symbol` |int | Symbol of the account as explained below |
-| `account_allocation` | str | Related to strategies that generate other tokens also - measures which allocation is the account a result of... |
+| `account_allocation` | str | Used to signal the allocation of the specific account (eth/stable/other) - for example unclaimed rewards correspond to ether/stable allocation if they come from strategies that use those assets |
 | `is_active` | bool | Whether the account is currently (being used by asset manager) |
-| *Vital atributes* |
+| *Vital atributes* | - | The minimum required for a good chart of accounts |
 | `account` | int | [PK] Unique identifier for the account |
-| `account_label` | str | Descriptive name for the account |
+| `account_label` | str | Descriptive name for the account. For eventual operational allocations (vs. investment allocations) we can add an Operational Funds in the level 3 - comes from vaults.fyi (as long as they exist there)|
 | `account_description` | str | Description of the account |
-| `account_level` | int | Level of the account (how many categories it has above) |
+| `account_level` | int | Level of the account (how many categories it has above). From 1 to N - depending on the amount of higher hierarchy accounts that contain it |
 | `account_level_n` | str | Complete for each account until the lower level to signal the hierarchy and be able to aggregate data for reporting |
 
 #### notes
 
 - Clarifications:
     - Each allocation (account) should be drilled down until the symbol (actual token being held) represents only one asset/has single price exposure. this is done in order to assign a single `symbol_level_0` to each of the balances being tracked (and then be able to decompose the portfolio into the base assets). It's also useful to index transactions that creats inflows/outflows from strategies.
-    - Unclaimed rewards is a particular allocation - does not respond to general rules and has to be treated invididually.
+    - There are cases like `wstETH` & `stETH` in which both have `account_label`="Lido stETH", but they have different `account` (each account is uniquely idenfitied by that and it depends on label + symbol).
+    - Unclaimed rewards is a particular allocation - does not respond to general rules and has to be treated invididually (for each account, there's one row per unclaimed reward that has the same `id` but different symbol).
 - Possible improvments:
     - Include option to check wthere it's included in the permissions for that specific client (in order to know the complete universe of investable assets).
 - Generalization:
@@ -109,7 +110,10 @@ Mapping of all assets that are tracked in the portfolio/s.
 
 - Clarifications:
     - `symbol` - right now is the symbol as identified in the data warehouse & ops app - it generally is the higher level representation of the asset (the one that is transfered and held and symbolizes the strategy)
-	- `type_level` - property that expreses the type of "underlying" or "wraps" that a token has vs. the original representation (e.g. aEthWETH is level `1` because it contains WETH inside that token, representing only one asset, and an LP token would be level `2` because it contains wrapped tokens and has several underlyings). A base asset would have level `0`.
+	- `type_level` - property that expreses the type of "underlying"/"wraps" that a token has vs. the original representation
+        - `level=0` - native asset (includes wrapped native) OR ERC20 base token (the level 0 token) - base representation of the token without smart contracts in the middle
+        - `level=1` - level 0 tokens with extra smart contract/strategy layer (e.g. staked native tokens, mm receipts - aEthWETH is level `1` because it contains WETH inside that token, representing only one asset)
+        - `level=2` - tokens that represent more than 1 underlying token (e.g. an LP token would be level `2` because it contains wrapped tokens and has several underlyings).
     - `symbol_level_0` is the underlying base asset mentioned above (in the cases where asset isn't level 0, `symbol_level_0` in that case represents the asset directly below, not necessarily the level 0).
 - Possible improvements:
     - Eventually assets can have a related position to double-check that in the case of transactions that involve them (but they might not coincide with the actual transaction)

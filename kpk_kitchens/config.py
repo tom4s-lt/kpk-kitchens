@@ -39,7 +39,6 @@ class BaseConfig:
     # Variables & Constants
     # ==============================================
 
-
 class JTConfig(BaseConfig):
     """Configuration specific to JT Kitchen."""
 
@@ -49,7 +48,7 @@ class JTConfig(BaseConfig):
     
     # jt_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1mIQTla9L7l3FBh1k8xtpHQwHMN4D7nHl1u5nsdeWdA0/"
-    LK_ASSETS: str = 'lk_assets'
+    LK_ASSETS_TAB: str = 'lk_assets'
 
     # Paths defined in parent class
 
@@ -127,16 +126,22 @@ class ENSConfig(BaseConfig):
     
     # ens_kitchen sheet
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
-    LK_ADDRESSES: str = 'lk_addresses'
-    LK_ASSETS: str = 'lk_assets'
-    TR_TT: str = 'tr_tt'
+    LK_ADDRESSES_TAB: str = 'lk_addresses'
+    LK_ASSETS_TAB: str = 'lk_assets'
+    TR_TT_TAB: str = 'tr_tt'
 
     # Paths defined in parent class
 
     # ==============================================
-    # Variables & Constants
+    # Dune Queries
     # ==============================================
 
-    DUNE_QUERY_ID_SF_EXTRACT_ENS_FINANCIALS_PER_WALLET: int = 3494149
-    DUNE_QUERY_ID_SF_EXTRACT_ENS_FINANCIALS_PER_WALLET_NO_ENS: int = 3494085
-    DUNE_QUERY_ID_EXTRACT_ENS_DAO_HOLDINGS: int = 3496916
+    DUNE_QID_EXTRACT_SF_ENS_FINANCIALS_PER_WALLET: int = 3494149
+    # DUNE_QID_EXTRACT_SF_ENS_FINANCIALS_PER_TOKEN
+    DUNE_QID_EXTRACT_ENS_DAO_HOLDINGS: int = 3496916
+
+    # ==============================================
+    # Blockchain addresses
+    # ==============================================
+
+    ENS_TOKEN_ADDRESS: str = '0xc18360217d8f7ab5e7c516566761ea12ce7f9d72'

@@ -2,7 +2,6 @@
 Configuration classes for kitchen notebooks.
 """
 
-from datetime import datetime
 from typing import Dict, Any
 
 class BaseConfig:
@@ -15,6 +14,7 @@ class BaseConfig:
     # API Keys
     COINGECKO_API_KEY: str = 'CG-jN5KXD1QFHacbpJb3T7PVJ3P'
     DUNE_API_KEY: str = 'RyXNIYLH4uE5NeEjLWQBZEcrkjTRw2EH'
+    VAULTS_FYI_API_KEY: str = 'mUecsmXr58GvFdjCa4Pm0BZufmnb0Rj7FnVmL56R5K4'
 
     # API Endpoints
     COINGECKO_API_BASE_URL: str = "https://api.coingecko.com/api/v3"
@@ -58,7 +58,6 @@ class JTConfig(BaseConfig):
 
     # Important Dates
     TTE_DATE: str = "2024-04-23"
-    ETL_NOW: datetime = datetime.now()
     
     # Token Configurations
     PORTFOLIO_TOKENS: Dict[str, Dict[str, Any]] = {
@@ -145,3 +144,4 @@ class ENSConfig(BaseConfig):
     # ==============================================
 
     ENS_TOKEN_ADDRESS: str = '0xc18360217d8f7ab5e7c516566761ea12ce7f9d72'
+    ENS_ENDOWMENT_ADDRESS: str = '0x4f2083f5fbede34c2714affb3105539775f7fe64'

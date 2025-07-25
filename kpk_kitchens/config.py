@@ -127,6 +127,7 @@ class ENSConfig(BaseConfig):
     WORKBOOK_URL: str = "https://docs.google.com/spreadsheets/d/1ml4EVLU6N7sv6R0Q102YOTwTPmStG64HlJ10aOkjIhY"
     LK_ADDRESSES_TAB: str = 'lk_addresses'
     LK_ASSETS_TAB: str = 'lk_assets'
+    LK_COA_P_TAB: str = 'lk_coa_p'  # _p is for portfolio (endowment) only
     TR_TT_TAB: str = 'tr_tt'
 
     # Paths defined in parent class

@@ -43,9 +43,11 @@ Used to categorize all allocations of the portfolio.
 | Column Name | Data Type | Description |
 |-------------|-----------|-------------|
 | *Non-vital metadata* | - | Used mainly to link txs to accounts & add more metadata that's useful (could eventually be done in a `account<>tx adapter`) |
+| `blockchain` | int | Name of the blockchain |
 | `protocol` | int | Name of the protocol |
-| `position` | int | Name of the position |
-| `symbol` |int | Symbol of the account as explained below |
+| `position` | int | Name of the position |r
+| `symbol` |int | Symbol of the account as explained below |r
+| *Very useful* | - | - |
 | `account_allocation` | str | Used to signal the allocation of the specific account (eth/stable/other) - for example unclaimed rewards correspond to ether/stable allocation if they come from strategies that use those assets |
 | `is_active` | bool | Whether the account is currently (being used by asset manager) |
 | *Vital atributes* | - | The minimum required for a good chart of accounts |

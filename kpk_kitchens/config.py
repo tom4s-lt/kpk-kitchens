@@ -31,6 +31,7 @@ class BaseConfig:
     # File Paths and Directories
     DATA_DIR: str = "./data"
 
+    # kitchen workflows
     PRICES_CSV: str = '/prices.csv'
     FINANCIALS_CSV: str = '/financials.csv'
     HOLDINGS_CSV: str = '/holdings.csv'
@@ -131,7 +132,9 @@ class ENSConfig(BaseConfig):
     LK_COA_P_TAB: str = 'lk_coa_p'  # _p is for portfolio (endowment) only
     TR_TT_TAB: str = 'tr_tt'
 
-    # Paths defined in parent class
+    # ens_ips workflow
+    ETH_HOLDING_RETURNS_CSV: str = '/eth_holding_returns.csv'
+    ETH_HOLDING_RETURNS_MONTHLY_CSV: str = '/eth_holding_returns_monthly.csv'
 
     # ==============================================
     # Dune Queries

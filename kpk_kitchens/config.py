@@ -34,6 +34,7 @@ class BaseConfig:
     PRICES_CSV: str = '/prices.csv'
     FINANCIALS_CSV: str = '/financials.csv'
     HOLDINGS_CSV: str = '/holdings.csv'
+    VAULTS_POSITIONS_CSV: str = '/vaults_positions.csv'
 
     # ==============================================
     # Variables & Constants

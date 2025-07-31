@@ -9,6 +9,10 @@ import time
 from datetime import datetime
 import spice
 
+# ==============================================
+#  API Request Functions
+# ==============================================
+
 def etl_gen_df_from_gsheet(
     gc,
     wb_url: str,
@@ -142,6 +146,40 @@ def spice_query_id(
 
     return query.to_pandas()
 
+# ==============================================
+#  Data processing functions
+# ==============================================
+
+def ann_risk_return_252(returns_df):
+    '''Summary statistics for portfolio (based on 252 trading days)
+
+    args:
+        returns_df: pandas DataFrame with returns
+
+    returns:
+        pandas DataFrame with summary statistics
+    '''
+    summary = returns_df.agg(["mean", "std"]).T
+    summary.columns = ["Return", "Risk"]
+    summary.Return = summary.Return * 252
+    summary.Risk = summary.Risk * np.sqrt(252)
+    return summary
+
+def ann_risk_return_365(returns_df):
+    '''
+    Summary statistics for portfolio (based on 365 trading days)
+
+    args:
+        returns_df: pandas DataFrame with returns
+
+    returns:
+        pandas DataFrame with summary statistics
+    '''
+    summary = returns_df.agg(["mean", "std"]).T
+    summary.columns = ["Return", "Risk"]
+    summary.Return = summary.Return * 365
+    summary.Risk = summary.Risk * np.sqrt(365)
+    return summary
 
 
 
@@ -152,10 +190,9 @@ def spice_query_id(
 
 
 
-
-
-
-
+# ==============================================
+#  Ohther/old
+# ==============================================
 
 # def fetch_data_with_retries(
 #     endpoint: str,

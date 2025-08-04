@@ -15,6 +15,7 @@ class BaseConfig:
     COINGECKO_API_KEY: str = 'CG-jN5KXD1QFHacbpJb3T7PVJ3P'
     DUNE_API_KEY: str = 'RyXNIYLH4uE5NeEjLWQBZEcrkjTRw2EH'
     VAULTS_FYI_API_KEY: str = 'mUecsmXr58GvFdjCa4Pm0BZufmnb0Rj7FnVmL56R5K4'
+    INFURA_API_KEY: str = '06c32bc518be488f85e27eced5883244'
 
     # API Endpoints
     COINGECKO_API_BASE_URL: str = "https://api.coingecko.com/api/v3"

@@ -3,11 +3,12 @@ Utility functions for kitchen notebooks.
 """
 
 from typing import Dict, List, Optional, Any, Union
-import pandas as pd
 import requests
+import spice
+import pandas as pd
+
 import time
 from datetime import datetime
-import spice
 
 # ==============================================
 #  API Request Functions
@@ -150,36 +151,36 @@ def spice_query_id(
 #  Data processing functions
 # ==============================================
 
-def ann_risk_return_252(returns_df):
-    '''Summary statistics for portfolio (based on 252 trading days)
+# def ann_risk_return_252(returns_df):
+#     '''Summary statistics for portfolio (based on 252 trading days)
 
-    args:
-        returns_df: pandas DataFrame with returns
+#     args:
+#         returns_df: pandas DataFrame with returns
 
-    returns:
-        pandas DataFrame with summary statistics
-    '''
-    summary = returns_df.agg(["mean", "std"]).T
-    summary.columns = ["Return", "Risk"]
-    summary.Return = summary.Return * 252
-    summary.Risk = summary.Risk * np.sqrt(252)
-    return summary
+#     returns:
+#         pandas DataFrame with summary statistics
+#     '''
+#     summary = returns_df.agg(["mean", "std"]).T
+#     summary.columns = ["Return", "Risk"]
+#     summary.Return = summary.Return * 252
+#     summary.Risk = summary.Risk * np.sqrt(252)
+#     return summary
 
-def ann_risk_return_365(returns_df):
-    '''
-    Summary statistics for portfolio (based on 365 trading days)
+# def ann_risk_return_365(returns_df):
+#     '''
+#     Summary statistics for portfolio (based on 365 trading days)
 
-    args:
-        returns_df: pandas DataFrame with returns
+#     args:
+#         returns_df: pandas DataFrame with returns
 
-    returns:
-        pandas DataFrame with summary statistics
-    '''
-    summary = returns_df.agg(["mean", "std"]).T
-    summary.columns = ["Return", "Risk"]
-    summary.Return = summary.Return * 365
-    summary.Risk = summary.Risk * np.sqrt(365)
-    return summary
+#     returns:
+#         pandas DataFrame with summary statistics
+#     '''
+#     summary = returns_df.agg(["mean", "std"]).T
+#     summary.columns = ["Return", "Risk"]
+#     summary.Return = summary.Return * 365
+#     summary.Risk = summary.Risk * np.sqrt(365)
+#     return summary
 
 
 

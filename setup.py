@@ -22,7 +22,6 @@ setup(
         'altair_viewer',
         'vega',
         'web3',
-        'json',
     ],
     author="Tomas Galizia",
     description="Shared utilities for KPK kitchen notebooks",

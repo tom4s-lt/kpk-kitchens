@@ -60,11 +60,11 @@ Used to categorize all allocations of the portfolio.
 #### notes
 
 - Clarifications:
-    - Each allocation (account) should be drilled down until the symbol (actual token being held) represents only one asset/has single price exposure. this is done in order to assign a single `symbol_level_0` to each of the balances being tracked (and then be able to decompose the portfolio into the base assets). It's also useful to index transactions that creats inflows/outflows from strategies.
+    - Each allocation (account) should be drilled down until the symbol (actual token being held) represents only one asset/has single price exposure. This is done in order to assign a single `symbol_level_0` to each of the balances being tracked (and then be able to decompose the portfolio into the base assets). It's also useful to index transactions that creats inflows/outflows from strategies.
     - There are cases like `wstETH` & `stETH` in which both have `account_label`="Lido stETH", but they have different `account` (each account is uniquely idenfitied by that and it depends on label + symbol).
     - Unclaimed rewards is a particular allocation - does not respond to general rules and has to be treated invididually (for each account, there's one row per unclaimed reward that has the same `id` but different symbol).
 - Possible improvments:
-    - Include option to check wthere it's included in the permissions for that specific client (in order to know the complete universe of investable assets).
+    - Include option to check whether it's included in the permissions for that specific client (in order to know the complete universe of investable assets).
 - Generalization:
     - Not entirely sure how this would be generalized to more than one client, there are categories that depend on the specific client (GNO token would be GNO for Gnosis DAO but Other token for ENS DAO).
 
@@ -89,7 +89,7 @@ Mapping of all addresses that belong to a specific client.
     - Have to idenfity which are treasury or "trackable" wallets.
 - Generalization:
     - Add `client`/`dao`/`company` to differentiate between them
-
+y oja
 ### assets
 
 Mapping of all assets that are tracked in the portfolio/s.

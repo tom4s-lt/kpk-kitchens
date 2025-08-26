@@ -123,6 +123,7 @@ def spice_query_id(
     query_id: int,
     api_key: str,
     refresh: bool = True,
+    performance: str = 'large',
     parameters: Dict[str, Any] = None,
 ) -> Optional[Dict[str, Any]]:
     """
@@ -142,6 +143,7 @@ def spice_query_id(
         query_id,
         refresh=refresh,
         api_key=api_key,
+        performance=performance,
         parameters=parameters
     )
 

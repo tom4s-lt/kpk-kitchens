@@ -146,6 +146,7 @@ Every transfer that involves an address related to the treasury. Right now this 
 | `pos_to_name` | str | position (inside the protocol) to which the token being transferred is going |
 | `comments` | str | ad hoc comments on the transaction |
 | *Additional attributes* to match transactions to accounts and build balances |
+| `symbol_level_0` | str | `symbol_level_0` of the token in the transaction (to match with positions on the underlying amounts) |
 | `dir` | int | either `1` for inflows or `-1` for outflows |
 | `4_null` | bool | Returns True if the record has 4 nulls (meaning no position attached) - that means only two of them should be included based on the direction of transaction in the custom `protocol_from`/`to` & `position_from`/`to` explained below |
 | `protocol_from` | str | This and the 3 below are just to organize so that the to/from attributes make sense to link txs to accounts |
